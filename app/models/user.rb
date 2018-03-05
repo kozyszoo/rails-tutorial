@@ -8,4 +8,11 @@ class User < ApplicationRecord
   has_secure_password # Test をする際のみここでエラーになる
  	validates :password, presence: true, length: { minimum: 6 }
   ## You don't have bcrypt installed in your application. Please add it to your Gemfile and run bundle install
+
+  # 渡された文字列のハッシュ値を返す
+  def User.digest(string)
+    cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST :
+                                                  BCrypt::Engine.cost
+    BCrypt::Password.create(string, cost: cost)
+  end
 end
